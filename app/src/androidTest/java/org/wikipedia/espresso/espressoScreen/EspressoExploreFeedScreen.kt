@@ -1,9 +1,8 @@
 package org.wikipedia.espresso.espressoScreen
 
-import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.swipeUp
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.hasSibling
 import androidx.test.espresso.matcher.ViewMatchers.isChecked
 import androidx.test.espresso.matcher.ViewMatchers.withChild
@@ -13,31 +12,23 @@ import org.hamcrest.Matchers.allOf
 import org.wikipedia.R
 
 class EspressoExploreFeedScreen {
-    private val listCheckboxOnePage = arrayListOf<String>("Самое читаемое", "Изображение дня","На основе прочитанного",
-        "В новостях", "В этот день")
-    private val listCheckboxTwoPage = arrayListOf<String>("Рандомизатор","Сегодня в Википедии")
-    private val scroll = withId(R.id.content_types_recycler)
+    private val listCheckboxPage = arrayListOf(
+        R.string.view_top_read_card_title,
+        R.string.view_featured_image_card_title,
+        R.string.view_because_you_read_card_title,
+        R.string.view_card_news_title,
+        R.string.on_this_day_card_title,
+        R.string.view_random_card_title,
+        R.string.view_main_page_card_title
+    )
 
-    fun checkFirstPage(){
-        for( i in listCheckboxOnePage){
+    fun checkPage(){
+        for( i in listCheckboxPage){
             onView(allOf(
-                hasSibling(withChild(withText(i.toString()))),
+                hasSibling(withChild(withText(i))),
                 withId(R.id.feed_content_type_checkbox)))
                 .check(matches(isChecked()))
+                .perform(swipeUp())
         }
-    }
-
-    fun checkSecondPage(){
-        for( i in listCheckboxTwoPage){
-            onView(allOf(
-                hasSibling(withChild(withText(i.toString()))),
-                withId(R.id.feed_content_type_checkbox)))
-                .check(matches(isChecked()))
-        }
-    }
-
-    fun scrollToLast(){
-        onView(scroll)
-            .perform(RecyclerViewActions.scrollToLastPosition<RecyclerView.ViewHolder>())
     }
 }
